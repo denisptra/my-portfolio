@@ -1,26 +1,17 @@
+
 import React from 'react';
 import ProjectCard from '../components/ProjectCard';
 import Breadcrumbs from '../components/Breadcrumbs';
 import { useApp } from '../AppContext';
-import { Project } from '../types';
 
 const Projects: React.FC = () => {
-  const { t } = useApp();
+  const { t, data, isLoading, lang } = useApp();
 
-  const allProjects: Project[] = [
-    {
-      id: '1',
-      title: 'Artics Communication',
-      description: 'Strategic Digital Marketing platform with a clean, high-performance architecture.',
-      imageUrl: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2426&auto=format&fit=crop'
-    },
-    {
-      id: '2',
-      title: 'Super League Indonesia',
-      description: 'Sports data tracking and match update system for premier league enthusiasts.',
-      imageUrl: 'https://images.unsplash.com/photo-1551288049-bbbda536339a?q=80&w=2670&auto=format&fit=crop'
-    }
-  ];
+  const projects = data.projects.map(p => ({
+    ...p,
+    title: p.title[lang],
+    description: p.description[lang]
+  }));
 
   return (
     <div className="py-12 animate-in fade-in duration-700">
@@ -35,11 +26,19 @@ const Projects: React.FC = () => {
       </div>
 
       <div className="max-w-6xl mx-auto px-6 mb-20">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-          {allProjects.map(project => (
-            <ProjectCard key={project.id} project={project} />
-          ))}
-        </div>
+        {isLoading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+            {[1, 2, 3, 4].map(i => (
+              <div key={i} className="h-96 bg-gray-50 rounded-[2rem] animate-pulse"></div>
+            ))}
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+            {projects.map(project => (
+              <ProjectCard key={project.id} project={project} />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

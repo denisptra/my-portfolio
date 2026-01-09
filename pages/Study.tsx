@@ -1,3 +1,4 @@
+
 import React from 'react';
 import ExperienceCard from '../components/ExperienceCard';
 import CTASection from '../components/CTASection';
@@ -5,37 +6,7 @@ import Breadcrumbs from '../components/Breadcrumbs';
 import { useApp } from '../AppContext';
 
 const Study: React.FC = () => {
-  const { t } = useApp();
-
-  const education = [
-    {
-      id: '1',
-      school: 'Cakrawala University',
-      degree: 'Bachelor of Computer Science',
-      major: 'Software Engineering',
-      period: '2024 - Present',
-      description: 'Deepening expertise in software architecture, cloud systems, and modern development paradigms.',
-      iconType: 'university' as const
-    },
-    {
-      id: '2',
-      school: 'Pesantren Teknologi Informasi & Komunikasi',
-      degree: 'Professional Certification',
-      major: 'Junior Web Developer',
-      period: '2023 - 2024',
-      description: 'Intensive one-year bootcamp focused on full-stack development and practical coding skills.',
-      iconType: 'code' as const
-    },
-    {
-      id: '3',
-      school: 'Madrasah Aliyah Al-Tsaqafah',
-      degree: 'Science Track',
-      major: 'Natural Sciences (IPA)',
-      period: '2020 - 2023',
-      description: 'Built a strong foundation in analytical thinking within an integrated curriculum.',
-      iconType: 'school' as const
-    }
-  ];
+  const { t, data, isLoading, lang } = useApp();
 
   return (
     <div className="py-12 animate-in fade-in duration-700">
@@ -50,18 +21,26 @@ const Study: React.FC = () => {
       </div>
 
       <div className="max-w-4xl mx-auto px-6 mb-20">
-        {education.map(item => (
-          <ExperienceCard 
-            key={item.id}
-            title={item.school}
-            subtitle={item.degree}
-            location={item.major}
-            period={item.period}
-            description={item.description}
-            iconType={item.iconType}
-            isEducation
-          />
-        ))}
+        {isLoading ? (
+          <div className="space-y-6">
+            {[1, 2].map(i => (
+              <div key={i} className="h-40 bg-gray-50 rounded-3xl animate-pulse"></div>
+            ))}
+          </div>
+        ) : (
+          data.education.map(item => (
+            <ExperienceCard 
+              key={item.id}
+              title={item.school}
+              subtitle={item.degree[lang]}
+              location={item.major[lang]}
+              period={item.period}
+              description={item.description[lang]}
+              iconType={item.iconType}
+              isEducation
+            />
+          ))
+        )}
       </div>
 
       <CTASection 
